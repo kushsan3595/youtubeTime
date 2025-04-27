@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile.user.username }}'s Profile | YouTubeTime{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h1 class="h3 mb-0">{{ profile.user.username }}'s Profile</h1>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" class="img-fluid rounded-circle mb-3" style="max-width: 150px;">
+                        {% if user == profile.user %}
+                        <p><a href="{% url 'profile-update' profile.id %}" class="btn btn-outline-primary btn-sm">Edit Profile</a></p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <h5>About</h5>
+                        <p>{{ profile.bio|linebreaks|default:"No bio yet." }}</p>
+                        <p><strong>Member Since:</strong> {{ profile.created_at|date:"F j, Y" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if user == profile.user %}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>My YouTube Videos</h2>
+            <a href="{% url 'video-create' %}" class="btn btn-primary">Add New Video</a>
+        </div>
+        {% else %}
+        <h2 class="mb-4">{{ profile.user.username }}'s YouTube Videos</h2>
+        {% endif %}
+
+        {% if videos %}
+        <div class="row">
+            {% for video in videos %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="{{ video.get_embed_url }}" title="{{ video.title }}" allowfullscreen></iframe>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ video.title }}</h5>
+                        <p class="card-text small text-muted">Added on {{ video.created_at|date:"F j, Y" }} • {{ video.views }} views</p>
+                        {% if video.description %}
+                        <p class="card-text">{{ video.description|truncatechars:100 }}</p>
+                        {% endif %}
+                        <a href="{% url 'video-detail' video.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
+                        {% if user == profile.user %}
+                        <a href="{% url 'video-update' video.id %}" class="btn btn-outline-secondary btn-sm">Edit</a>
+                        <a href="{% url 'video-delete' video.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            {% if user == profile.user %}
+            You haven't added any YouTube videos yet. <a href="{% url 'video-create' %}">Add your first video!</a>
+            {% else %}
+            {{ profile.user.username }} hasn't added any YouTube videos yet.
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-4">
+        <div class="ad-container">
+            <!-- Ad will be inserted here by JavaScript -->
+        </div>
+        
+        {% if user == profile.user %}
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                Your Stats
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <span>Total Videos:</span>
+                    <strong>{{ videos.count }}</strong>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <span>Total Views:</span>
+                    <strong>{{ total_views }}</strong>
+                </div>
+                <hr>
+                <div class="text-center mt-3">
+                    <a href="{% url 'dashboard' %}" class="btn btn-success btn-sm">View Full Dashboard</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete YouTube Video | YouTubeTime{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h1 class="h3 mb-0">Delete YouTube Video</h1>
+            </div>
+            <div class="card-body">
+                <p>Are you sure you want to delete the video "{{ object.title }}"?</p>
+                <div class="ratio ratio-16x9 mb-3">
+                    <iframe src="{{ object.get_embed_url }}" title="{{ object.title }}" allowfullscreen></iframe>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                        <a href="{% url 'video-detail' object.id %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}YouTubeTime - Share and Earn{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="hero-section bg-primary text-white p-5 rounded mb-4">
+            <h1>Welcome to YouTubeTime</h1>
+            <p class="lead">
+                Create your profile, share your favorite YouTube videos, and earn rewards for your time!
+            </p>
+            {% if not user.is_authenticated %}
+            <div class="mt-4">
+                <a href="{% url 'account_signup' %}" class="btn btn-light me-2">Sign Up</a>
+                <a href="{% url 'account_login' %}" class="btn btn-outline-light">Log In</a>
+            </div>
+            {% else %}
+            <div class="mt-4">
+                <a href="{% url 'dashboard' %}" class="btn btn-light me-2">View Dashboard</a>
+                <a href="{% url 'video-create' %}" class="btn btn-outline-light">Add YouTube Video</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="features mb-4">
+            <h2>How It Works</h2>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h3 class="h5">Create Profile</h3>
+                            <p>Sign up and create your profile to get started.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h3 class="h5">Share Videos</h3>
+                            <p>Add your favorite YouTube videos to your profile.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h3 class="h5">Earn Rewards</h3>
+                            <p>Earn from ad revenue based on your screen time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="ad-container">
+            <!-- Ad will be inserted here by JavaScript -->
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Why Join YouTubeTime?
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">✅ Share your favorite YouTube content</li>
+                    <li class="list-group-item">✅ Track your screen time</li>
+                    <li class="list-group-item">✅ Earn rewards from ad revenue</li>
+                    <li class="list-group-item">✅ Discover videos from other users</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

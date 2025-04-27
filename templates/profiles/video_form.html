@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if form.instance.pk %}Edit{% else %}Add{% endif %} YouTube Video | YouTubeTime{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h1 class="h3 mb-0">{% if form.instance.pk %}Edit{% else %}Add{% endif %} YouTube Video</h1>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Save Video</button>
+                        {% if form.instance.pk %}
+                        <a href="{% url 'video-detail' form.instance.pk %}" class="btn btn-outline-secondary">Cancel</a>
+                        {% else %}
+                        <a href="{% url 'profile-detail' user.profile.id %}" class="btn btn-outline-secondary">Cancel</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
