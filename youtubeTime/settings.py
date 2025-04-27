@@ -4,8 +4,9 @@ from pathlib import Path
 # Try to import dj_database_url, but don't fail if it's not available
 try:
     import dj_database_url
+    HAS_DJ_DATABASE_URL = True
 except ImportError:
-    dj_database_url = None
+    HAS_DJ_DATABASE_URL = False
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -91,10 +92,8 @@ DATABASES = {
 }
 
 # Use PostgreSQL on Render
-if dj_database_url and 'DATABASE_URL' in os.environ:
-    DATABASES['default'] = dj_database_url.config(
-        conn_max_age=600,
-    )
+if HAS_DJ_DATABASE_URL and 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 
 # Password validation
