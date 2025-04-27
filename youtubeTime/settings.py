@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import sys
 
 # Try to import dj_database_url, but don't fail if it's not available
 try:
@@ -43,6 +44,11 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
         },
     },
 }
@@ -107,6 +113,7 @@ WSGI_APPLICATION = 'youtubeTime.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# Default to SQLite for local development
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -114,8 +121,26 @@ DATABASES = {
     }
 }
 
+# Check if running on Render.com (production)
+ON_RENDER = 'RENDER' in os.environ
+
 # Use PostgreSQL on Render
-if HAS_DJ_DATABASE_URL and 'DATABASE_URL' in os.environ:
+if ON_RENDER:
+    # Print debug info about database configuration
+    print("Running on Render, setting up PostgreSQL")
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    if DATABASE_URL:
+        print(f"Found DATABASE_URL: {DATABASE_URL[:10]}...")  # Print first part for security
+        DATABASES['default'] = dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+        print("PostgreSQL configured successfully")
+    else:
+        print("ERROR: DATABASE_URL not found in environment")
+elif HAS_DJ_DATABASE_URL and 'DATABASE_URL' in os.environ:
+    # For local testing with PostgreSQL
     DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 
