@@ -19,4 +19,4 @@ A website where users can create profiles, share YouTube links, track screen tim
 - User registration and profiles
 - YouTube video embedding
 - Screen time tracking
-- Ad integration with revenue sharing 
+- Ad integration with revenue sharing
